@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.coupon.repository.CouponTemplateRepository">
+
+    <resultMap id="templateResultMap" type="com.example.coupon.model.CouponTemplateModel">
+        <id property="id" column="id"/>
+        <result property="templateId" column="template_id"/>
+        <result property="name" column="name"/>
+        <result property="couponType" column="coupon_type"/>
+        <result property="couponValue" column="coupon_value"/>
+        <result property="minConsume" column="min_consume"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="totalQuantity" column="total_quantity"/>
+        <result property="userMaxQuantity" column="user_max_quantity"/>
+        <result property="issuedQuantity" column="issued_quantity"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <select id="findByTemplateId" resultMap="templateResultMap">
+        SELECT id, template_id, name, coupon_type, coupon_value, min_consume,
+               start_time, end_time, total_quantity, user_max_quantity,
+               issued_quantity, create_time, update_time
+        FROM coupon_template
+        WHERE template_id = #{templateId}
+    </select>
+
+    <insert id="save" parameterType="com.example.coupon.model.CouponTemplateModel">
+        INSERT INTO coupon_template (template_id, name, coupon_type, coupon_value, min_consume,
+                                      start_time, end_time, total_quantity, user_max_quantity,
+                                      issued_quantity, create_time, update_time)
+        VALUES (#{templateId}, #{name}, #{couponType}, #{couponValue}, #{minConsume},
+                #{startTime}, #{endTime}, #{totalQuantity}, #{userMaxQuantity},
+                #{issuedQuantity}, #{createTime}, #{updateTime})
+    </insert>
+
+    <update id="incrementIssuedQuantity">
+        UPDATE coupon_template
+        SET issued_quantity = issued_quantity + #{increment},
+            update_time = CURRENT_TIMESTAMP
+        WHERE template_id = #{templateId}
+    </update>
+
+</mapper>
